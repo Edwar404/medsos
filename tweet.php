@@ -32,7 +32,8 @@ if (isset($_POST['posting'])) {
     header('location:?pg=profil&tweet=berhasil');
 }
 
-$queryPosting = mysqli_query($koneksi, "SELECT * FROM tweet WHERE id_user='$id_user'");
+// $queryPosting = mysqli_query($koneksi, "SELECT tweet.*, comments.id AS id_komennih, comments.* FROM tweet LEFT JOIN comments ON tweet.id = comments.status_id  WHERE id_user='$id_user'");
+$queryPosting = mysqli_query($koneksi, "SELECT tweet.* FROM tweet WHERE id_user='$id_user'");
 
 
 ?>
@@ -62,12 +63,12 @@ $queryPosting = mysqli_query($koneksi, "SELECT * FROM tweet WHERE id_user='$id_u
                     </div>
                 </div>
                 <div class="flex-grow-1 ms-3">
-                    <form action="add_comment.php" id="comment-form" method="post">
+                    <form action="add_comment.php" method="POST">
                         <input type="text" name="status_id" value="<?php echo $rowPosting['id'] ?>">
                         <input type="text" name="user_id" value="<?php echo $rowPosting['id_user'] ?>">
 
                         <textarea name="comment_text" class="form-control" id="comment_text" cols="5" rows="5" placeholder="Tulis Balasan Anda ... "></textarea>
-                        <button class="btn btn-primary btn-sm mt-2" type="submit">Kirim Balasan</button>
+                        <button class="btn btn-secondary btn-sm mt-2" type="submit">Kirim Balasan</button>
                     </form>
 
                     <div class="alert mt-2" id="comment-alert" style="display: none;"></div>
@@ -76,7 +77,7 @@ $queryPosting = mysqli_query($koneksi, "SELECT * FROM tweet WHERE id_user='$id_u
                         if (isset($rowPosting['comment_text'])) {
                             $idStatus = $rowPosting['status_id'];
                             $userId = $rowPosting['user_id'];
-                            $queryComment = mysqli_query($koneksi, "SELECT * FROM comments WHERE ststus_id = $idStatus AND user_id = $userId");
+                            $queryComment = mysqli_query($koneksi, "SELECT * FROM comments WHERE status_id = $idStatus AND user_id = $userId");
                             $rowCounts = mysqli_fetch_all($queryComment, MYSQLI_ASSOC);
 
                             foreach ($rowCounts as $rowCount) {
@@ -113,7 +114,7 @@ $queryPosting = mysqli_query($koneksi, "SELECT * FROM tweet WHERE id_user='$id_u
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <textarea name="content" id="summernote" class="form-control">Apa Yang Sedang Anda Pikirkan?</textarea>
+                        <textarea name="content" id="summernote" class="form-control" placeholder="Apa Yang Sedang Anda Pikirkan?"></textarea>
                     </div>
                     <div class="mb-3">
                         <input type="file" name="foto">
@@ -128,7 +129,7 @@ $queryPosting = mysqli_query($koneksi, "SELECT * FROM tweet WHERE id_user='$id_u
     </div>
 </div>
 
-<script>
+<!-- <script>
     document.getElementById('comment-form').addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(this);
@@ -148,10 +149,10 @@ $queryPosting = mysqli_query($koneksi, "SELECT * FROM tweet WHERE id_user='$id_u
                     location.reload();
                 } else {
                     alertBox.className = "alert alert-danger";
-                    alertBox.innerHTMl = data.message;
+                    alertBox.innerHTML = data.message;
                 }
                 alertBox.style.display = "block";
             })
             .catch(error => console.error("Error:", error));
     });
-</script>
+</script> -->
