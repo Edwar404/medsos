@@ -52,7 +52,7 @@ $queryPosting = mysqli_query($koneksi, "SELECT * FROM tweet WHERE id_user='$id_u
                         <p><?php echo $rowUser['nama_lengkap'] ?></p>
                         <p><i></i>(<?php echo $rowUser['nama_pengguna'] ?>)</i></p>
                     </div>
-                    <div class="d-flex">
+                    <div class="d-flex gap-3">
                         <?php if (!empty($rowPosting['foto'])): ?>
                             <img class="rounded" src="upload/<?php echo $rowPosting['foto'] ?>" height="250" width="250" alt="">
                         <?php endif ?>
@@ -127,3 +127,31 @@ $queryPosting = mysqli_query($koneksi, "SELECT * FROM tweet WHERE id_user='$id_u
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('comment-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+
+        fetch("add_comment.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const alertBox = document.getElementById("comment-alert");
+                if (data.status === "success") {
+                    alertBox.className = "alert alert-success";
+                    alertBox.innerHTML = data.message;
+                    // BERSIHKAN TEXTAREA 
+                    document.getElementById('comment_text').value = "";
+                    location.reload();
+                } else {
+                    alertBox.className = "alert alert-danger";
+                    alertBox.innerHTMl = data.message;
+                }
+                alertBox.style.display = "block";
+            })
+            .catch(error => console.error("Error:", error));
+    });
+</script>
