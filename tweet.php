@@ -62,6 +62,11 @@ $queryPosting = mysqli_query($koneksi, "SELECT tweet.* FROM tweet WHERE id_user=
                         </div>
                     </div>
                 </div>
+                <!-- LIKE -->
+                <div class="status mt-1">
+                    <input type="text" id="user_id_like" value="<?php echo $rowPosting['id_user'] ?>">
+                    <button class="btn btn-success btn-sm" onclick="toggleLike(<?php echo $rowPosting['id']; ?>)">Like (0)</button>
+                </div>
                 <div class="flex-grow-1 ms-3">
                     <form action="add_comment.php" method="POST">
                         <input type="text" name="status_id" value="<?php echo $rowPosting['id'] ?>">
@@ -74,10 +79,10 @@ $queryPosting = mysqli_query($koneksi, "SELECT tweet.* FROM tweet WHERE id_user=
                     <div class="alert mt-2" id="comment-alert" style="display: none;"></div>
                     <div class="mt-1">
                         <?php
-                        if (isset($rowPosting['comment_text'])) {
-                            $idStatus = $rowPosting['status_id'];
-                            $userId = $rowPosting['user_id'];
-                            $queryComment = mysqli_query($koneksi, "SELECT * FROM comments WHERE status_id = $idStatus AND user_id = $userId");
+                        if (isset($rowPosting['id']) && isset($rowPosting['id_user'])) {
+                            $idStatus = $rowPosting['id'];
+                            $userId = $rowPosting['id_user'];
+                            $queryComment = mysqli_query($koneksi, "SELECT * FROM comments WHERE status_id = '$idStatus' AND user_id = '$userId'");
                             $rowCounts = mysqli_fetch_all($queryComment, MYSQLI_ASSOC);
 
                             foreach ($rowCounts as $rowCount) {
@@ -128,6 +133,29 @@ $queryPosting = mysqli_query($koneksi, "SELECT tweet.* FROM tweet WHERE id_user=
         </div>
     </div>
 </div>
+
+<script>
+    function toggleLike(statusId) {
+        const userId = document.getElementById('user_id_like').value;
+        fetch("like_status.php", {
+                method: 'POST',
+                header: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `status_id=${statusId}&user_id=${userId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "liked") {
+                    alert("Liked!");
+                } else if (data.status === "unliked") {
+                    alert("unliked!");
+                }
+                location.reload();
+            })
+            .catch(error => console.error("Error:", error));
+    }
+</script>
 
 <!-- <script>
     document.getElementById('comment-form').addEventListener('submit', function(e) {
