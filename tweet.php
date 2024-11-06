@@ -63,9 +63,14 @@ $queryPosting = mysqli_query($koneksi, "SELECT tweet.* FROM tweet WHERE id_user=
                     </div>
                 </div>
                 <!-- LIKE -->
+                <?php
+                $idStatusnya = $rowPosting['id'];
+                $selectLike = mysqli_query($koneksi, "SELECT COUNT(user_id) AS countuser FROM likes WHERE status_id = '$idStatusnya'");
+                $rowLike = mysqli_fetch_assoc($selectLike);
+                ?>
                 <div class="status mt-1">
                     <input type="text" id="user_id_like" value="<?php echo $rowPosting['id_user'] ?>">
-                    <button class="btn btn-success btn-sm" onclick="toggleLike(<?php echo $rowPosting['id']; ?>)">(0)</button>
+                    <button class="btn btn-success btn-sm" onclick="toggleLike(<?php echo $rowPosting['id']; ?>)">Like (<?php echo isset($rowLike['countuser']) ? $rowLike['countuser'] : "0" ?>)</button>
                 </div>
                 <!-- COMMENT -->
                 <div class="flex-grow-1 ms-3">
