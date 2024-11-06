@@ -65,8 +65,9 @@ $queryPosting = mysqli_query($koneksi, "SELECT tweet.* FROM tweet WHERE id_user=
                 <!-- LIKE -->
                 <div class="status mt-1">
                     <input type="text" id="user_id_like" value="<?php echo $rowPosting['id_user'] ?>">
-                    <button class="btn btn-success btn-sm" onclick="toggleLike(<?php echo $rowPosting['id']; ?>)">Like (0)</button>
+                    <button class="btn btn-success btn-sm" onclick="toggleLike(<?php echo $rowPosting['id']; ?>)">(0)</button>
                 </div>
+                <!-- COMMENT -->
                 <div class="flex-grow-1 ms-3">
                     <form action="add_comment.php" method="POST">
                         <input type="text" name="status_id" value="<?php echo $rowPosting['id'] ?>">
@@ -139,7 +140,7 @@ $queryPosting = mysqli_query($koneksi, "SELECT tweet.* FROM tweet WHERE id_user=
         const userId = document.getElementById('user_id_like').value;
         fetch("like_status.php", {
                 method: 'POST',
-                header: {
+                headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                 },
                 body: `status_id=${statusId}&user_id=${userId}`
@@ -149,7 +150,7 @@ $queryPosting = mysqli_query($koneksi, "SELECT tweet.* FROM tweet WHERE id_user=
                 if (data.status === "liked") {
                     alert("Liked!");
                 } else if (data.status === "unliked") {
-                    alert("unliked!");
+                    alert("Unliked!");
                 }
                 location.reload();
             })

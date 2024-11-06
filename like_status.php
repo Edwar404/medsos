@@ -13,15 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $qUnlike = mysqli_query($koneksi, "DELETE FROM likes WHERE status_id = '$status_id' AND user_id = '$user_id'");
         if ($qUnlike) {
             # SUKSES
-            $response = [
-                'status' => 'unliked'
-            ];
+            $response = ['status' => 'unliked'];
         } else {
             // GAGAL UNLIKE
-            $response = [
-                'status' => 'error',
-                'message' => 'GAGAL MENG-UNLIKE.'
-            ];
+            $response = ['status' => 'error', 'message' => 'GAGAL MENG-UNLIKE.'];
         }
     } else {
         #JIKA BELUM LIKE, LAKUKAN LIKE
@@ -29,15 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
         if ($queryLike) {
             # SUKSES
-            $response = [
-                'status' => 'like'
-            ];
+            $response = ['status' => 'likes'];
         } else {
             // GAGAL UNLIKE
-            $response = [
-                'status' => 'error',
-                'message' => 'GAGAL LIKE.'
-            ];
+            $response = ['status' => 'error', 'message' => 'GAGAL LIKE.'];
         }
     }
     // KIRIM RESPONSE
